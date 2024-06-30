@@ -32,7 +32,7 @@ tags: [linked list, 링크드 리스트]
 
 
 ## 전체코드
-```Java
+```java
 class Solution {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         int expandedNum = 0;
