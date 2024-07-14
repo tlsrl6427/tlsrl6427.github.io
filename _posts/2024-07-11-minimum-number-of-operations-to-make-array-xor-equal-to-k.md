@@ -4,6 +4,9 @@ categories: [Algorithm]
 tags: [array, xor, 배열, algorithm, bit manipulation]
 ---
 
+[문제링크](https://leetcode.com/problems/minimum-number-of-operations-to-make-array-xor-equal-to-k/submissions/1317056678)
+<br>
+
 ### 문제설명
 주어지는 변수: int[] nums, int k
 1. nums에 있는 수와 k를 이진수로 바꾼다
