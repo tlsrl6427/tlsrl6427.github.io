@@ -5,7 +5,7 @@ tags: [array, xor, 배열, algorithm, bit manipulation]
 ---
 
 ### 문제설명
-변수: int[] nums, int k
+주어지는 변수: int[] nums, int k
 1. nums에 있는 수와 k를 이진수로 바꾼다
 2. nums에 있는 수를 모두 XOR로 연산한 값이 k와 같아야한다
 3. 이때 k와 같아지기 위해 nums의 이진수값을 자유롭게 0->1, 1->0으로 바꿀 수 있다
@@ -21,8 +21,11 @@ tags: [array, xor, 배열, algorithm, bit manipulation]
    - nums 배열의 값들을 모두 이진수로 바꾸고 다 더한다
    - 0이나 짝수는 0으로, 홀수는 1로 치환한다
    - 숫자들을 k의 이진수와 비교하며 다를때 answer(바꾼 횟수)++을 해준다
+![img1](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img1.jpg)
+
 
 ### 오답노트
+![img2](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img2.png)
 1. 답은 맞았으나 시간이 너무 느리게 나왔다. 일단 출력문들을 지워봤는데 큰 차이는 없었다. 따라서 다른 풀이방법을 생각해봤다
 2. 로직을 바꿔볼지 toBinaryString() 같은 함수를 직접 구현할지 고민했는데, 함수는 간단한거라 크게 걸릴 것 같지 않고 딱봐도 로직이 맘에 안들어서 로직을 바꿀 생각을 했다
 3. 풀이과정 중 XOR이 교환법칙이 성립된다는 것을 알았다. 또 이항해도 된다는 것도 알았다. 일단 킵
@@ -96,4 +99,7 @@ class Solution {
 ```
 1. 크게 두 부분으로 나뉘어서 sum과 sum^k의 값을 구하는 것은 유사하다
 2. sum을 구하는 부분에서 나는 시작값을 nums[0]으로 했는데 생각해보니 XOR 연산이니 0으로 시작해도 됐겠다
-3. 아래 부분은 로직이 바뀌기 전과 똑같은데, 두 값이 다르면 바꾸고 카운트해야된다는 소리이다. XOR 연산 자체가 같으면 0, 다르면 1을 나타내기 때문에 나는 저렇게 k와 finalXor을 따로 안하고 k ^ finalXor을 한 후에 판단했다. 연산차이는 크지 않을 것 같은데 뭐가 좋을지 굳이 따지자면 간결성은 내 것이 좋으나 다른 사람이 코드를 보고 이해를 할때는 이렇게 적는 것이 좋을 것 같다
+3. 아래 부분은 시간이 오래걸린 로직과 똑같은데, 두 값이 다르면 바꾸고 카운트해야된다는 소리이다. XOR 연산 자체가 같으면 0, 다르면 1을 나타내기 때문에 나는 저렇게 k와 finalXor을 따로 안하고 k ^ finalXor을 한 후에 판단했다. 연산차이는 크지 않을 것 같은데 뭐가 좋을지 굳이 따지자면 간결성은 내 것이 좋으나 다른 사람이 코드를 보고 이해를 할때는 이렇게 적는 것이 좋을 것 같다
+
+* if문을 안쓴 이유
+* ![img3](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img3.png)
