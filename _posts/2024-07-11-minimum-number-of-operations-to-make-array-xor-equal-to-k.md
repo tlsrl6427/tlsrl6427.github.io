@@ -106,4 +106,5 @@ class Solution {
 </br>
 
 * if문을 안쓴 이유
+  
 ![img3](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img3.png)
