@@ -10,9 +10,11 @@ tags: [array, xor, 배열, algorithm, bit manipulation]
 2. nums에 있는 수를 모두 XOR로 연산한 값이 k와 같아야한다
 3. 이때 k와 같아지기 위해 nums의 이진수값을 자유롭게 0->1, 1->0으로 바꿀 수 있다
 4. 최소한의 변경횟수가 답이다
+</br>
 
 ### 생각할 포인트
 1. nums 배열의 특정 수를 바꾸는 게 중요한 것이 아니라 전체적으로 최소 몇번 바꾸는지가 중요하다
+</br>
 
 ### 접근방식
 1. 일단 예제풀이
@@ -22,7 +24,7 @@ tags: [array, xor, 배열, algorithm, bit manipulation]
    - 0이나 짝수는 0으로, 홀수는 1로 치환한다
    - 숫자들을 k의 이진수와 비교하며 다를때 answer(바꾼 횟수)++을 해준다
 ![img1](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img1.jpg)
-
+</br>
 
 ### 오답노트
 ![img2](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img2.png)
@@ -33,6 +35,7 @@ tags: [array, xor, 배열, algorithm, bit manipulation]
 5. toBinaryString()을 쓸 필요없이 ^로 모두 연산한 값(sum)만 k와 비교하면 됐다
 6. 3번에서 해본 이항으로 sum도 sum ^ k로 만들어버렸다
 7. sum ^ k에서 1의 개수만 카운트하면 됐다
+</br>
 
 ### 전체코드
 
@@ -100,6 +103,7 @@ class Solution {
 1. 크게 두 부분으로 나뉘어서 sum과 sum^k의 값을 구하는 것은 유사하다
 2. sum을 구하는 부분에서 나는 시작값을 nums[0]으로 했는데 생각해보니 XOR 연산이니 0으로 시작해도 됐겠다
 3. 아래 부분은 시간이 오래걸린 로직과 똑같은데, 두 값이 다르면 바꾸고 카운트해야된다는 소리이다. XOR 연산 자체가 같으면 0, 다르면 1을 나타내기 때문에 나는 저렇게 k와 finalXor을 따로 안하고 k ^ finalXor을 한 후에 판단했다. 연산차이는 크지 않을 것 같은데 뭐가 좋을지 굳이 따지자면 간결성은 내 것이 좋으나 다른 사람이 코드를 보고 이해를 할때는 이렇게 적는 것이 좋을 것 같다
+</br>
 
 * if문을 안쓴 이유
-* ![img3](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img3.png)
+![img3](/assets/img/2024-07-11-minimum-number-of-operations-to-make-array-xor-equal-to-k/img3.png)
