@@ -78,4 +78,12 @@ public class StringToEnumCustomConverterFactory implements ConverterFactory<Stri
 
  ### 여기서 더
  
-  지금 경우는 @ModelAttribute에 한정된 해결방법이다. 똑같은 경우에서 @RequestBody를 사용했을 땐 HttpMessageNotReadableException이 뜬다. 얕게 찾아보니 json을 파싱할 땐 MappingJackson2HttpMessageConverter를 사용하고 이안에서 Enum 처리를 위해 EnumDeserializer를 사용한다고 한다. 비슷한 원리로 전역적으로 해결하기 위해서는 이 EnumDeserializer를 커스텀으로 만들어서 손봐야될 것 같은데 이건 다음 글에서 확인해보려고 한다.
+  지금 경우는 @ModelAttribute에 한정된 해결방법이다. 똑같은 경우에서 @RequestBody를 사용했을 땐 HttpMessageNotReadableException이 뜬다. 얕게 찾아보니 json을 파싱할 땐 MappingJackson2HttpMessageConverter를 사용하고 이안에서 Enum 처리를 위해 EnumDeserializer를 사용한다고 한다. 비슷한 원리로 전역적으로 해결하기 위해서는 이 EnumDeserializer를 커스텀으로 만들어서 손봐야될 것 같은데 이건 다음 글에서 확인해보려고 한다.<br>
+<br>
+
+- 참고한 링크<br>
+[https://velog.io/@haerong22/Enum-%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0-%EB%B0%94%EC%9D%B8%EB%94%A9]<br>
+[https://velog.io/@roycewon/Enum-%ED%83%80%EC%9E%85-%EB%B3%80%ED%99%98-%EC%A0%84%EC%97%AD%EC%9C%BC%EB%A1%9C-%EC%84%A4%EC%A0%95-%ED%95%98%EA%B8%B0-Converter-ConverterFactory]<br>
+[https://velog.io/@jmjmjmz732002/Springboot-ModelAttribute]<br>
+[https://inkyu-yoon.github.io/docs/Language/SpringBoot/EnumValidation]<br>
+[https://velog.io/@kmw89891/DTO-enum-%ED%95%84%EB%93%9C-%EC%82%AC%EC%9A%A9]<br>
