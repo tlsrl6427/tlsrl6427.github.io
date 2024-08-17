@@ -5,12 +5,17 @@ tags: [enum, exception, converter, aop]
 ---
 
 ### API에서 Enum을 사용할때의 문제점
+
  간단하게 Enum들(Sports, Colors)와 EnumRequest를 만들고 EnumController를 통해 API 통신하는 프로젝트를 만들었다. 입력값은 URL에 적어서 가며 파라미터들을 EnumRequest로 한꺼번에 받기 위해 @ModelAttribute를 사용하였다. 그런 후 Enum값과 다른 값을 줬을 때 어떤 에러가 나올까?<br>
-Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.
-<img src="/assets/img/2024-08-16-enum-custom/img1.png" width="50%" height="50%">
-콘솔에서는 'football'이란 단어에 대해 String 타입을 Sports 타입으로 변경하는데에 실패했다고 나온다.
-<img src="/assets/img/2024-08-16-enum-custom/img2.png" width="50%" height="50%">
-그리고 포스트맨(클라이언트 입장)에서는 어떤 오류가 생겼는지 알 수 없다. 때문에 Enum Convert 에러가 떠도 사용자 입장에서 알 수 있도록 바꿔볼 생각이다.
+<br>
+Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.<br>
+<br>
+<img src="/assets/img/2024-08-16-enum-custom/img1.png" width="50%" height="50%"><br>
+콘솔에서는 'football'이란 단어에 대해 String 타입을 Sports 타입으로 변경하는데에 실패했다고 나온다.<br>
+<br>
+<img src="/assets/img/2024-08-16-enum-custom/img2.png" width="50%" height="50%"><br>
+그리고 포스트맨(클라이언트 입장)에서는 어떤 오류가 생겼는지 알 수 없다. 때문에 Enum Convert 에러가 떠도 사용자 입장에서 알 수 있도록 바꿔볼 생각이다.<br>
+<br>
 
 ### 해결방법
 
@@ -27,7 +32,8 @@ Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.
 &nbsp;세 번째는 2번 내용을 담은 예외를 사용자에게 보여주는 것이다. 사실 이게 제일 중요한 거긴하다. 이것만 있어도 어떤 에러가 나왔는지 사용자가 볼 수는 있기 때문이다. @RestControllerAdvice를 선언한 클래스에서 특정 예외에 @ExceptionHandler를 걸어주면 그 예외가 터질때는 이쪽으로 넘어와서 처리가 되게 된다. 그때 내용에 에러의 내용을 ResponseEntity에 넣으면 사용자가 확인할 수 있다. 지금은 MethodArgumentNotValidException만 예외를 걸면 되어서 이 예외에 대한 내용만 넣었지만 상위 객체인 BindException이나 그 상위인 Exception을 넣으면 훨씬 넒은 범위의 에러를 한꺼번에 처리할 수도 있다. 나중에 언젠간 보겠지만 @ModelAttribute가 아닌 @RequestBody를 사용할 때는 다른 에러가 뜨기 때문에 다른 메소드를 작성해놓아야한다.<br>
 <br>
 <결과><br>
-<img src="/assets/img/2024-08-16-enum-custom/img3.png" width="50%" height="50%">
+<img src="/assets/img/2024-08-16-enum-custom/img3.png" width="50%" height="50%"><br>
+<br>
 
 ### 더 좋은 방법?
 
@@ -36,7 +42,8 @@ Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.
 - @JsonCreator?<br>
 &nbsp;아시는 분은 아시겠지만 이 방법은 틀렸다. 이건 @RequestBody에서만 동작한다. 원리는 Http에서 body로 오는 json을 파싱할때 @JsonCreator를 선언해놓으면 원래 메소드 대신 @JsonCreator 하단에 적힌 메소드로 대신 파싱해주는 것이었다. 이 방법은 Converter를 따로 만들 필요없이 파싱 메소드 위에 선언만 하면 되기때문에 중복을 반으로 줄여주는 효과가 있다. 그래도 중복 자체는 있기 때문에 @RequestBody를 사용할때 중복을 아예 없애는 방법도 생각해봐야될 것 같다.<br>
 <br>
-&nbsp; 커스텀 Enum 어노테이션은 내 기준에서는 조금 어려워서 패스했고 ConverterFactory 내용을 살펴보았다. ConverterFactory는 String을 Enum으로 바꿀 때 사용하며 Enum Type에 맞는 Converter를 반환하고 그 Converter의 convert() 함수를 이용해 String을 알맞는 Enum으로 바꾼다. 따로 구현해주지 않는다면 Enum Type마다 Converter가 없기때문에 공통적으로 StringToEnumConverterFactory에 구현되어있는 Enum.valueOf()를 통해 변환된다. 나는 여기서 아이디어를 얻어 이 Enum.valueOf()를 해결방법에서 구현했던 메소드로 대체할 수 있으면 Enum을 전역적으로 내가 원하는대로 변환할 수 있지 않을까라는 생각을 하게 됐다.
+&nbsp; 커스텀 Enum 어노테이션은 내 기준에서는 조금 어려워서 패스했고 ConverterFactory 내용을 살펴보았다. ConverterFactory는 String을 Enum으로 바꿀 때 사용하며 Enum Type에 맞는 Converter를 반환하고 그 Converter의 convert() 함수를 이용해 String을 알맞는 Enum으로 바꾼다. 따로 구현해주지 않는다면 Enum Type마다 Converter가 없기때문에 공통적으로 StringToEnumConverterFactory에 구현되어있는 Enum.valueOf()를 통해 변환된다. 나는 여기서 아이디어를 얻어 이 Enum.valueOf()를 해결방법에서 구현했던 메소드로 대체할 수 있으면 Enum을 전역적으로 내가 원하는대로 변환할 수 있지 않을까라는 생각을 하게 됐다.<br>
+<br>
 
 ### 채택한 방식
  여기까지 왔다면 이제는 쉽다. ConvertFactory를 커스텀으로 만들고 안의 내용을 Enum에서 구현해두었던 파싱 메소드로 바꾸면 된다.
@@ -66,7 +73,8 @@ public class StringToEnumCustomConverterFactory implements ConverterFactory<Stri
     }
 }
 ```
- 이렇게 하면 모든 Enum 타입에 대해 대소문자 무시 비교를 해주고 일치하지 않으면 null을 반환한다. 그러면 @NotNull에서 판단해 message의 내용을 에러 객체에 담아주고 advice에서 Response를 사용자에게 주는 것이다. 결과화면은 동일하다. 하지만 몇 개의 Enum이 생기더라도 Request 객체의 @NotNull을 작성하는 것 말고는 할게 없어진다.
+ 이렇게 하면 모든 Enum 타입에 대해 대소문자 무시 비교를 해주고 일치하지 않으면 null을 반환한다. 그러면 @NotNull에서 판단해 message의 내용을 에러 객체에 담아주고 advice에서 Response를 사용자에게 주는 것이다. 결과화면은 동일하다. 하지만 몇 개의 Enum이 생기더라도 Request 객체의 @NotNull을 작성하는 것 말고는 할게 없어진다.<br>
+ <br>
 
  ### 여기서 더
  
