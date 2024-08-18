@@ -10,10 +10,10 @@ tags: [enum, exception, converter, aop]
 <br>
 Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.<br>
 <br>
-<img src="/assets/img/2024-08-16-enum-custom/img1.png" width="50%" height="50%"><br>
+<img alt="img1" src="/assets/img/2024-08-16-enum-custom/img1.png" width="50%" height="50%"><br>
 콘솔에서는 'football'이란 단어에 대해 String 타입을 Sports 타입으로 변경하는데에 실패했다고 나온다.<br>
 <br>
-<img src="/assets/img/2024-08-16-enum-custom/img2.png" width="50%" height="50%"><br>
+<img alt="img2" src="/assets/img/2024-08-16-enum-custom/img2.png" width="50%" height="50%"><br>
 그리고 포스트맨(클라이언트 입장)에서는 어떤 오류가 생겼는지 알 수 없다. 때문에 Enum Convert 에러가 떠도 사용자 입장에서 알 수 있도록 바꿔볼 생각이다.<br>
 <br>
 
@@ -32,7 +32,7 @@ Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.<br>
 &nbsp;세 번째는 2번 내용을 담은 예외를 사용자에게 보여주는 것이다. 사실 이게 제일 중요한 거긴하다. 이것만 있어도 어떤 에러가 나왔는지 사용자가 볼 수는 있기 때문이다. @RestControllerAdvice를 선언한 클래스에서 특정 예외에 @ExceptionHandler를 걸어주면 그 예외가 터질때는 이쪽으로 넘어와서 처리가 되게 된다. 그때 내용에 에러의 내용을 ResponseEntity에 넣으면 사용자가 확인할 수 있다. 지금은 MethodArgumentNotValidException만 예외를 걸면 되어서 이 예외에 대한 내용만 넣었지만 상위 객체인 BindException이나 그 상위인 Exception을 넣으면 훨씬 넒은 범위의 에러를 한꺼번에 처리할 수도 있다. 나중에 언젠간 보겠지만 @ModelAttribute가 아닌 @RequestBody를 사용할 때는 다른 에러가 뜨기 때문에 다른 메소드를 작성해놓아야한다.<br>
 <br>
 <결과><br>
-<img src="/assets/img/2024-08-16-enum-custom/img3.png" width="50%" height="50%"><br>
+<img alt="img3" src="/assets/img/2024-08-16-enum-custom/img3.png" width="50%" height="50%"><br>
 <br>
 
 ### 더 좋은 방법?
