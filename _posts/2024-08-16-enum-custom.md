@@ -23,7 +23,7 @@ Sports의 값 중 FootBall -> football로 바꾸고 요청을 해보았다.<br>
 <br>
 1. StringToEnumConverter + EnumMethod
 2. @NotNull(@Valid)
-3. GlobalExceptionHandler(AOP)
+3. GlobalExceptionHandler(AOP)<br>
 <br>
 &nbsp;첫 번째로 Request가 도착했을 때 모든 글자는 String에서 StringToXXXConverter를 통해 알맞는 타입으로 바뀐다. 1번의 기능은 String이 Enum으로 바뀔때 우리가 의도한대로 바뀌도록 하는 것이다. String이 Enum으로 바뀔때는 기본적으로 Enum.valueOf() 함수를 통해 바뀌기 때문에 글자가 모두 일치할때만 통과되고 아니면 MethodArgumentNotValidException이 뜬다. 때문에 Custom Converter를 만들어 대소문자 상관없이 통과되고, 통과되지 않을 땐 예외로 넘어가는 것이 아닌 null이 반환되게 만들었다.<br>
 <br>
