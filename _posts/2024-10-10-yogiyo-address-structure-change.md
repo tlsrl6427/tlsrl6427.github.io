@@ -112,12 +112,71 @@ ex) 개선 후 테이블
  
 ### 데이터가 쌓여가면서 생기는 문제
 
- 더미 데이터가 10만건을 넘기기 시작했을 때의 일이다. 점점.. 느려진다. 어떤 정렬을 하던 필터링을 하던 5초 정도나 걸려서야 조회가 됐다. 어디서 문제가 일어나는지는 뻔했다. 데이터베이스였다. 애플리케이션은 DTO로 감싸서 보내주는 것만 수행했고 데이터베이스는 Amazon RDS Freetier(MariaDB)를 사용하기 때문에 메모리가 1GB밖에 안돼서 사실 언제 터지나 궁금하긴했다. 원인은 st_distance_sphere 함수였다. 쿼리를 날릴 때 주위의 상점만 조회하기 위해 모든 로우에 대해 st_distance_sphere를 실행하기 때문에 시간이 오래걸리는 것이었다. 애플리케이션에서 거리계산하는 부분을 수행해볼까도 생각해봤는데 어차피 애플리케이션도 똑같이 Amazon EC2 Freetier라 별다를게 없을 것 같아 패스하고, 쿼리를 어떻게 건드려보기로 했다. 
+ 더미 데이터가 10만건을 넘기기 시작했을 때의 일이다. 점점.. 느려진다. 어떤 정렬을 하던 필터링을 하던 5초 정도나 걸려서야 조회가 됐다. 어디서 문제가 일어나는지는 뻔했다. 데이터베이스였다. 애플리케이션은 DTO로 감싸서 보내주는 것만 수행했고 데이터베이스는 Amazon RDS Freetier(MariaDB)를 사용하기 때문에 메모리가 1GB밖에 안돼서 사실 언제 터지나 궁금하긴했다. 원인으로 생각되는 것은 페이지네이션, st_distance_sphere 함수 등이었다. 쿼리를 날릴 때 주위의 상점만 조회하기 위해 모든 로우에 대해 st_distance_sphere를 실행하기 때문에 시간이 오래걸릴 것이다. 거기다 페이지네이션으로 limit, offset을 받아 간단히 구현했기 때문에 뒤로 갈수록 느려지는 느낌도 있었다. 애플리케이션에서 거리계산하는 부분을 수행해볼까도 생각해봤는데 어차피 애플리케이션도 똑같이 Amazon EC2 Freetier라 별다를게 없을 것 같아 패스하고(지금와서야 생각해보면 그래도 해볼 걸 그랬다. 다음에 비슷한 상황이 오면 해봐야겠다), 쿼리를 어떻게 건드려보기로 했다. 
 
 ### 쿼리튜닝
 
- 문제 원인이 st_distance_sphere 함수였기 때문에 최대한 이 함수를 덜 쓰는 방향으로 생각했다. 처음부터 모든 거리를 계산하지 말고 일단 필터링으로 거를건 먼저 거르고, 주변 10km내에 있는 상점을 가져오기로 했다.
+ 먼저 문제의 큰 원인이 st_distance_sphere 함수라고 생각했기 때문에 최대한 이 함수를 덜 쓰는 방향으로 생각했다. 처음부터 모든 거리를 계산하지 말고 일단 필터링으로 거를건 먼저 거르고, 주변 10km내에 있는 상점을 가져오기로 했다.
 
+```java
+// QueryDSL
+// (1) subquery로 필터링된 shop_id 먼저 받기
+OrderSpecifier<?> orderSpecifier = getOrderSpecifier(request.getSortOption());
+List<Long> filteredShopId = jpaQueryFactory
+        .select(shop.id)
+        .from(shop)
+        .where(
+                categoryNameEq(request.getCategory()),
+                deliveryPriceLt(request.getDeliveryPrice()),
+                leastOrderPriceLt(request.getLeastOrderPrice())
+        )
+        .orderBy(orderSpecifier)
+        .limit(request.getLimit())
+        .offset(request.getOffset())
+        .fetch();
+
+// (2) 필터링된 filteredShopId에서 거리 계산하고, 거리순 정렬이면 거리순 정렬 추가로 해주기
+return jpaQueryFactory
+            .select(Projections.fields(ShopScrollResponse.class,
+                    …
+                    getShopDistance(request.getLatitude(), request.getLongitude()).as("distance"),
+                    …
+            ))
+          .from(shop)
+          .where(shop.id.in(filteredShopId))
+          .orderBy(orderSpecifier);
+          .fetch();
+```
+
+생략된 부분이 많아서 의사코드로 생각하면 좋을 것 같다. 핵심은 쿼리를 두번에 걸쳐서 실행했다는 것이다. 거기다가 추가로 신경쓰였던 페이지네이션도 무한스크롤로 바꿔줬다. 무한스크롤과 querydsl을 사용하는데에는 [이동욱님 블로그](https://jojoldu.tistory.com/529)를 참고하였다. 최종본을 SQL로 보여주면(위에껀 애플리케이션에서 두번에 걸쳐서 실행했다는 것을 보여주기 위해 querydsl을 보여줬다)
+
+```sql
+-- ex) 주문 많은 순 정렬
+-- (2)
+SELECT *, st_distance_sphere(point(curLongitude, curLatitude), point(s.longitude, s.atitude)) as distance
+FROM shop 
+WHERE shop.shop_id IN (
+  --(1)
+	SELECT * from
+	(
+		SELECT shop.shop_id
+		FROM shop
+		JOIN category_shop ON category_shop.shop_id=shop.shop_id
+		JOIN category ON category_shop.category_id=category.category_id
+		WHERE category.name='치킨'
+		AND shop.min_delivery_price<=3000
+		AND shop.min_order_price<=10000
+		AND ( (shop.order_num=467 and shop.shop_id<2000000) OR shop.order_num<467 )
+		ORDER BY shop.order_num DESC
+		LIMIT 10
+	) AS tmp
+) and distance < 10000
+```
+
+무한스크롤에 대한 설명은 넘어가고,, 쨋든 무한스크롤 했다! MainCursor(orderNum, reviewNum...), SubCursor(shop_id)를 받아서 무한스크롤의 cursor로 삼았다. xxxNum은 중복값이 있기 때문에 중복되면 shop_id로 판별하고, 값이 다르면 xxxNUM으로 판별한다는 뜻이다. 자세한 건 이 [LG유플러스 기술 블로그](https://techblog.uplus.co.kr/jpa-%EC%A1%B0%ED%9A%8C-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%ED%95%9C-%EC%9D%B4%EC%95%BC%EA%B8%B0-2999c9210522)를 참고했다. 야무지게 성능개선한다고 정렬기준이 되는 xxxNum은 인덱스까지 만들었다.
+
+ 쿼리 튜닝을 하고난 다음엔 1.xxx초대로 쿼리가 빨라졌다. 은근 나름 굉장히 뿌듯했지만 얼마 안갔다. 필터링을 다빼고 조회를 하면 filteredShopId이 모든 행에 대해 나왔기 때문에 또다시 지옥의 거리계산을 하기 때문이다. 초기화면이 필터링을 제외한 데이터로 조회된다는 것은 알고 있었는데 나중에 어떻게든 하겠지하고 넘기고 일단 무한스크롤이랑 인덱스랑 querydsl이랑 이것저것 해보자라는 생각이었다. 더미 데이터를 100만건 정도로 서서히 늘리니 무한스크롤이고 뭐고 결과는 다시 느리게 나왔고 심지어 필터링을 제외한 조회는 15초정도가 걸렸었다. 서버가 안죽고 15초동안 계산해서 준 것도 신기했다. 이제는 더이상 물러날 데가 없다...
+ 
 ### 주소 구조 변경
 
 ### 결과
