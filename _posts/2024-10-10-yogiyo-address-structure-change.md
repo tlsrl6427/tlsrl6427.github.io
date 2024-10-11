@@ -4,7 +4,9 @@ categories: [Database]
 tags: [querydsl, 쿼리 튜닝, mysql]
 ---
 
- 「요기요」 앱을 클론코딩하는 프로젝트를 진행하였다. 보는대로 따라만드는 거라 처음엔 큰 어려움은 없었다. 점주 입장에서 음식점을 등록하고 고객 입장에서 음식점을 조회하는, 게시판의 확장 버전 정도? 그렇게 설계와 구현이 끝나가는듯 싶더니 여러가지 문제점이 발생했다. 그 중 대표적인 것이 음식점 리스트를 조회하는 페이지가 눈에 띄게 느려진 것이다. 처음엔 어떻게든 바꾸고 바꿔서 온몸 비틀기하다가 결국에는 한계를 보고 설계를 다시 생각하는 상황까지 왔다. 처음 시작부터 해결하기까지의 과정을 살펴보자.
+ 「요기요」 앱을 클론코딩하는 프로젝트를 진행하였다. 보는대로 따라만드는 거라 처음엔 큰 어려움은 없었다. 점주 입장에서 음식점을 등록하고 고객 입장에서 음식점을 조회하는, 게시판의 확장 버전 정도? 
+ 
+&nbsp;그렇게 설계와 구현이 끝나가는듯 싶더니 여러가지 문제점이 발생했다. 그 중 대표적인 것이 음식점 리스트를 조회하는 페이지가 눈에 띄게 느려진 것이다. 처음엔 어떻게든 바꾸고 바꿔서 온몸 비틀기하다가 결국에는 한계를 보고 설계를 다시 생각하는 상황까지 왔다. 처음 시작부터 해결하기까지의 과정을 살펴보자.
 
 ## 1. Shop(음식점) 테이블 설계
 
@@ -70,7 +72,6 @@ order by SortOption(orderNum, reviewNum, totalScore, distance)
     </p>
 </li>
 <li>그냥은 st_distance_sphere 함수를 쓸 수 없다. JPA에서 기본으로 제공하는 MariaDBDialect에는 이 함수를 제공하지 않기 때문이다. 그래서 따로 MariaDBDialectConfig를 만들어 등록해줬다.
-<p>
   
 ```java
 public class MariaDBDialectConfig extends MariaDBDialect {
@@ -83,15 +84,13 @@ public class MariaDBDialectConfig extends MariaDBDialect {
     }
 }
 ```
-</p>
-<p>
   
 ```yaml
 spring:
   jpa:
     database-platform: toy.yogiyo.common.config.MariaDBDialectConfig
 ```
-</p>
+
 </li>
 <li>최소주문금액과 최소배달금액<br>
    
