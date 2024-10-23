@@ -6,7 +6,8 @@ tags: [yml, yaml, multi module]
 
 ### 멀티 모듈
 
- 멀티 모듈을 처음으로 사용해봤다. 이유는 아주 간단하게 보기에 헷갈리기 때문이었다. 사이드 프로젝트를 두개정도 해보며 많은 기능이 없어도 파일들이 엄청 많이 생기고 정리하려면 날을 잡아야될 정도란걸 알게 됐다. 또 각각 다른 port에서 실행되는 jar파일이 있기 때문에 각자 빌드가 필요했다. 그래서 될 수 있으면 만들때부터 구조를 맞춰 작성하려고 멀티 모듈을 사용했다. common, api, batch의 모듈로 나누었다.
+&nbsp;멀티 모듈을 처음으로 사용해봤다. 이유는 아주 간단하게 보기에 헷갈리기 때문이었다. 사이드 프로젝트를 두개정도 해보며 많은 기능이 없어도 파일들이 엄청 많이 생기고 정리하려면 날을 잡아야될 정도란걸 알게 됐다.   
+&nbsp;또 이번 프로젝트는 각각 다른 port에서 실행되는 jar파일이 있었기 때문에 각자 빌드가 필요했다. 그래서 될 수 있으면 만들때부터 구조를 맞춰 작성하려고 멀티 모듈을 사용했다. common, api, batch의 모듈로 나누었다.
 
 ### 설정 파일(build.gradle, application.properties)
 
@@ -17,14 +18,14 @@ tags: [yml, yaml, multi module]
  ```yaml
 // Project build.gradle
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.2'
-	id 'io.spring.dependency-management' version '1.1.6'
+  id 'java'
+  id 'org.springframework.boot' version '3.3.2'
+  id 'io.spring.dependency-management' version '1.1.6'
 }
 
 subprojects { // 공통으로 사용될 라이브러리 설정
-	group = 'com.loltmi'
-	version = '0.0.1-SNAPSHOT'
+  group = 'com.loltmi'
+  version = '0.0.1-SNAPSHOT'
 
   dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -38,7 +39,7 @@ subprojects { // 공통으로 사용될 라이브러리 설정
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	}
+}
 ```
 
 ```yaml
@@ -82,12 +83,13 @@ dependencies {
 
  build.gradle을 생각보다 쉽게 해치웠기 때문에 application.properties도 똑같을 거라 생각했다. common 모듈의 application.properties에 공통 설정을 하고 나머지 모듈은 각자의 설정을 한 파일을 가졌다. 근데? 안된다?
  
- ![Datasource 설정 에러"](/assets/img/2024-10-13-yaml-properties/img1.png "Datasource 설정 에러")
+ ![Datasource 설정 에러](/assets/img/2024-10-13-yaml-properties/img1.png "Datasource 설정 에러")
 
 
 ### YamlPropertySourceFactory
 
- Datasource 같은 공통 설정은 common에 있는 application.yml에 다 해놓았다. 찾아보니 공통으로 application.properties를 사용하려면 따로 설정을 해주어야했다. 이유는 [Spring Boot 공식문서](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.files)에 나와있는데 설정 파일을 탐색할 때 결국은 자기 클래스 내에서만 하기 때문이다.
+&nbsp;위의 에러는 데이터베이스 url이 설정되지 않았다는 것이다. Datasource 같은 공통 설정은 common에 있는 application.yml에 다 해놓았다. 그런데 왜 안될까?   
+&nbsp;찾아보니 공통으로 application.properties를 사용하려면 따로 설정을 해주어야했다. 이유는 [Spring Boot 공식문서](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.files)에 나와있는데 설정 파일을 탐색할 때 결국은 자기 클래스 내에서만 하기 때문이다.
  
  ![img2](/assets/img/2024-10-13-yaml-properties/img2.png "External Application Properties")
 
