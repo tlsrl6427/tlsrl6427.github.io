@@ -68,29 +68,10 @@ order by SortOption(orderNum, reviewNum, totalScore, distance)
   </ol>
     </p>
   <p>
-&nbsp;여러가지를 고려해보다가 shop 테이블에 orderNum과 reviewNum을 만들고 order과 review가 생성될 때마다 +1 해주도록 바꿨다. 제대로 만드려면 단일 책임 원칙을 따라 advice를 만들어 createOrder, createReview와 별개로 orderNum과 reviewNum을 +1하는 로직을 만들어야 됐을 것 같은데 귀찮아서 createXXX에 다 때려넣었다. [저스틴 비버문제](https://bezzang2.tistory.com/m/145)를 참고했다.
+&nbsp;여러가지를 고려해보다가 shop 테이블에 orderNum과 reviewNum을 만들고 order과 review가 생성될 때마다 +1 해주도록 바꿨다. 제대로 만드려면 단일 책임 원칙을 따라 advice를 만들어 createOrder, createReview와 별개로 orderNum과 reviewNum을 +1하는 로직을 만들어야 됐을 것 같은데 귀찮아서 createXXX에 다 때려넣었다. <a href="https://bezzang2.tistory.com/m/145">저스틴 비버문제</a>를 참고했다.
     </p>
 </li>
-<li>그냥은 st_distance_sphere 함수를 쓸 수 없다. JPA에서 기본으로 제공하는 MariaDBDialect에는 이 함수를 제공하지 않기 때문이다. 그래서 따로 MariaDBDialectConfig를 만들어 등록해줬다.
-  
-```java
-public class MariaDBDialectConfig extends MariaDBDialect {
-
-    public MariaDBDialectConfig(){
-        super();
-        registerFunction(
-                "st_distance_sphere",
-                new StandardSQLFunction("st_distance_sphere", StandardBasicTypes.DOUBLE));
-    }
-}
-```
-  
-```yaml
-spring:
-  jpa:
-    database-platform: toy.yogiyo.common.config.MariaDBDialectConfig
-```
-
+<li>그냥은 st_distance_sphere 함수를 쓸 수 없다. JPA에서 기본으로 제공하는 MariaDBDialect에는 이 함수를 제공하지 않기 때문이다. 그래서 따로 MariaDBDialectConfig를 클래스로 만들고 yaml파일에 등록해줬다.
 </li>
 <li>최소주문금액과 최소배달금액
 <p>
