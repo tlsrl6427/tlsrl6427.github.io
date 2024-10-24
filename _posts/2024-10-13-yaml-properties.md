@@ -128,11 +128,11 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
  해치운줄 알았는데 뜻밖의 오류를 마주했다.
  
- ![img3](/assets/img/2024-10-13-yaml-properties/img1.png)
+ ![img3](/assets/img/2024-10-13-yaml-properties/img3.png)
 
 &nbsp;뜬금없이 또 데이터베이스에서 비밀번호가 일치하지 않는다는 것이다. 비밀번호를 메모장에 쳐놓고 복붙해서 그럴리가 없는데.. 포트도 보고, 유저 접근 권한도 봤는데 이상없었다. 그러던 중 눈에 띄는 것이 있었다. using password...No? 분명 비밀번호는 yaml에 있을텐데..? 
 
-![img4](/assets/img/2024-10-13-yaml-properties/img1.png)
+![img4](/assets/img/2024-10-13-yaml-properties/img4.png)
 
 &nbsp;yaml에 있는 비밀번호를 일부러 틀리게 해서 실행해보았다. 그랬더니 이번엔 using password가 yes로 바뀌었다. 이렇게되니 yaml에서 인식 못하는 문자가 포함되었다는 생각이 들었고, 비밀번호를 바꿨더니 정상적으로 되었다.
 
