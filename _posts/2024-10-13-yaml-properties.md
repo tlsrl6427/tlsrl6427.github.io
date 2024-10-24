@@ -165,7 +165,7 @@ spring:
 
 ![img7](/assets/img/2024-10-13-yaml-properties/img7.png)
 
-&nbsp;따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다(${job.name:NONE}없이 Program argument에 값을 추가해도 저 오류가 뜬다). 
+&nbsp;따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다( ${job.name:NONE}없이 Program argument에 값을 추가해도 저 오류가 뜬다 ). 
 
 근데... $가 있네...?
 
