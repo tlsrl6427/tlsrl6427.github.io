@@ -155,6 +155,8 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
 ![img6](/assets/img/2024-10-13-yaml-properties/img6.png)
 
+<br>
+
 &nbsp;Github Actions를 실행할때 Github Secret에서 값을 고대로 가져온다. 이때 Github Actions는 ubuntu환경에서 실행돼서 $로 시작하는 문구는 "$변수명"으로 인식해 당연히 저 이름의 변수명이 없으니 빈 값으로 치는 것이었다. 그렇다면 linux 계열에서 쓰는 $, &, |, ( 등의 문자들은 다 사용할때 주의해야한다는 것이다. 음... 그렇군 그럼 최대한 사용하지 말아야겠다.
 
 <br>
@@ -234,4 +236,4 @@ spring:
 
 ### 끝?
 
- &nbsp;끝이다. 정말 우연히 데이터베이스 비밀번호에 $를 쓰는 바람에 많~이 돌아왔다. 이런게 막상 부딪히면 어떻게 해결할지 모를때가 많은데 이번엔 해답을 찾아서 다행이다. 혹시 이 글로 Github Secret에 $를 쓰면 안되는지 처음 알았다면 기억해두자,,
+ &nbsp; 끝이다. 정말 우연히 데이터베이스 비밀번호에 $를 쓰는 바람에 많~이 돌아왔다. 이런게 막상 부딪히면 어떻게 해결할지 모를때가 많은데 이번엔 해답을 찾아서 다행이다. 혹시 이 글로 Github Secret에 $를 쓰면 안되는지 처음 알았다면 기억해두자,,
