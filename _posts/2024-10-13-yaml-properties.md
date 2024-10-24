@@ -163,9 +163,11 @@ spring:
 
 &nbspSpring Batch 3부터는 multiple job을 돌리는 것을 막았다. 2개 이상의 job이 있으면 실행할 job을 명시하지 않을시 이러한 오류가 뜬다.
 
-![img7](/assets/img/2024-10-13-yaml-properties/img1.png)
+![img7](/assets/img/2024-10-13-yaml-properties/img7.png)
 
-&nbsp따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다. 근데... $가 있네...?
+&nbsp따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다(${job.name:NONE}없이 Program argument에 값을 추가해도 저 오류가 뜬다). 
+
+근데... $가 있네...?
 
 1. / 넣기
 
