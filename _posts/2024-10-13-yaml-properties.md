@@ -216,16 +216,16 @@ spring:
  # SECRET_YML 파일 생성
     - name: Make application-secret.yml
       run: |
-        cd ./common/src/main/resources # resources 폴더로 이동
-        touch ./application-common.yaml # application.yml 생성
+        cd ./common/src/main/resources
+        touch ./application-common.yaml
         echo "${{ secrets.COMMON_YML }}" > ./application-common.yaml
 
         cd /home/runner/work/LOLTMI/LOLTMI
         cd ./batch/src/main/resources
-        touch ./application-secret.yml # application.yml 생성
+        touch ./application-secret.yml
         echo "${SECRET_YML_BATCH}" > ./application-secret.yml
       env:
-        SECRET_YML_BATCH: ${{ secrets.SECRET_YML_BATCH }}
+        SECRET_YML_BATCH: ${{ secrets.SECRET_YML_BATCH }} // env에 선언
 ```
 
 &nbsp;workflow에서 run 할때 따로 변수를 선언하고 거기다 초기화를 하면 된다. 나는 이 방법이 먹혔고 제일 낫다고 생각해 이렇게 쓰기로 했다. env에 대해선 [Github Docs](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#env)에 나와있는데 뭐 별거없다.
