@@ -81,7 +81,7 @@ dependencies {
 
 - application.properties
 
- build.gradle을 생각보다 쉽게 해치웠기 때문에 application.properties도 똑같을 거라 생각했다. common 모듈의 application.properties에 공통 설정을 하고 나머지 모듈은 각자의 설정을 한 파일을 가졌다. 근데? 안된다?
+ build.gradle을 생각보다 쉽게 해치웠기 때문에 application.properties도 똑같을 거라 생각했다. common 모듈의 application.properties에 공통 설정을 하고 나머지 모듈은 각자의 설정을 한 파일을 가졌다. 그리고 Github에 Secret Variable로 각각을 등록한 후, Github Actions 빌드 과정에서 파일 디렉토리에 추가해주었다. 근데? 안된다?
  
  ![Datasource 설정 에러](/assets/img/2024-10-13-yaml-properties/img1.png "Datasource 설정 에러")
 
@@ -122,9 +122,45 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 }
 ```
 
-### Github Actions Secret Variable
+### Github Actions Secret Variable(with Special Characters)
+
+- Docker logs에 찍힌 Spring 오류
 
  해치운줄 알았는데 뜻밖의 오류를 마주했다.
+ 
   ![img](/assets/img/2024-10-13-yaml-properties/img1.png)
+
+&nbsp;뜬금없이 또 데이터베이스에서 비밀번호가 일치하지 않는다는 것이다. 비밀번호를 메모장에 쳐놓고 복붙해서 그럴리가 없는데.. 포트도 보고, 유저 접근 권한도 봤는데 이상없었다. 그러던 중 눈에 띄는 것이 있었다. using password...No? 분명 비밀번호는 yaml에 있을텐데..? 
+
+![img](/assets/img/2024-10-13-yaml-properties/img1.png)
+
+&nbsp;yaml에 있는 비밀번호를 일부러 틀리게 해서 실행해보았다. 그랬더니 이번엔 using password가 yes로 바뀌었다. 이렇게되니 yaml에서 인식 못하는 문자가 포함되었다는 생각이 들었고, 비밀번호를 바꿨더니 정상적으로 되었다.
+
+- 원인
+
+&nbsp;먼저 yaml에 사용하면 안되는 문자들을 찾아보았다.
+
+![img](/assets/img/2024-10-13-yaml-properties/img1.png)
+
+&nbsp;이상하다... 없다. 원래 비밀번호는 $로 시작하고 영문자, 숫자가 섞인 8자 이상의 비밀번호였다. 어찌됐든 yaml에서 문제가 발생한 것은 맞으니 그럼 Github Actions에서 빌드하는 과정에 문제가 있나..? 하고 추측할 수 밖에 없었고 그에 대해 찾아보기로 했다. 
+
+&nbsp;이 과정을 멘토님께 말씀드리니 [Github Community 글](https://github.com/orgs/community/discussions/25651)을 찾아주셨다.
+
+![img](/assets/img/2024-10-13-yaml-properties/img1.png)
+
+&nbsp;Github Actions를 실행할때 Github Secret에서 값을 고대로 가져온다. 이때 Github Actions는 ubuntu환경에서 실행돼서 $로 시작하는 문구는 "$변수명"으로 인식해 당연히 저 이름의 변수명이 없으니 빈 값으로 치는 것이었다. 그렇다면 linux 계열에서 쓰는 $, &, |, ( 등의 문자들은 다 사용할때 주의해야한다는 것이다. 음... 그렇군 그럼 최대한 사용하지 말아야겠다.
+
+- 해결방법
+
+&nbsp정말 사용하고 싶지 않았는데 어쩔 수 없이 사용해야만 하는 상황이 왔다. Spring Batch를 써본 분이라면 이 문구를 알고 있을 것이다.
+
+```yaml
+spring:
+  batch:
+    job:
+      name: ${job.name:NONE}
+```
+
+
 
 
