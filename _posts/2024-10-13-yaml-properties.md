@@ -161,6 +161,15 @@ spring:
       name: ${job.name:NONE}
 ```
 
+&nbspSpring Batch에서 이 문구를 넣지 않으면 모든 배치를 실행시킨다. 특정 job이 있으면 그걸 실행시키고 없으면 아무 배치도 실행시키지 않기 위해서는 저 설정을 추가해야한다.
 
+&nbsp라고 알고있겠지만 Spring Batch 5에서는 multiple job을 돌리는 것을 막았다. 자세히 보면 job.names-> job.name로 바뀐 것을 볼 수 있다. 한 개만 적으라는 뜻이다. 따라서 2개 이상의 job이 있으면 실행할 job을 명시하지 않을시 이러한 오류가 뜬다.
 
+![img](/assets/img/2024-10-13-yaml-properties/img1.png)
+
+&nbspjob.name에 사용할 "한 개의 job"을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다. 근데... $가 있네...?
+
+1. / 넣기
+2. ''로 묶기
+3. env 추가
 
