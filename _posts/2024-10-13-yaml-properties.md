@@ -152,7 +152,7 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
 - 해결방법
 
-&nbsp정말 사용하고 싶지 않았는데 어쩔 수 없이 사용해야만 하는 상황이 왔다. Spring Batch를 써본 분이라면 이 문구를 알고 있을 것이다.
+&nbsp;정말 사용하고 싶지 않았는데 어쩔 수 없이 사용해야만 하는 상황이 왔다. Spring Batch를 써본 분이라면 이 문구를 알고 있을 것이다.
 
 ```yaml
 spring:
@@ -161,11 +161,11 @@ spring:
       name: ${job.name:NONE}
 ```
 
-&nbspSpring Batch 3부터는 multiple job을 돌리는 것을 막았다. 2개 이상의 job이 있으면 실행할 job을 명시하지 않을시 이러한 오류가 뜬다.
+&nbsp;Spring Batch 3부터는 multiple job을 돌리는 것을 막았다. 2개 이상의 job이 있으면 실행할 job을 명시하지 않을시 이러한 오류가 뜬다.
 
 ![img7](/assets/img/2024-10-13-yaml-properties/img7.png)
 
-&nbsp따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다(${job.name:NONE}없이 Program argument에 값을 추가해도 저 오류가 뜬다). 
+&nbsp;따라서 job.name에 사용할 job을 명시해야하고, 만약 jar파일을 실행할 때 동적으로 Program argument에 사용할 job을 넣고 싶으면 ${job.name:NONE}를 추가해야한다(${job.name:NONE}없이 Program argument에 값을 추가해도 저 오류가 뜬다). 
 
 근데... $가 있네...?
 
@@ -173,25 +173,25 @@ spring:
 
 ![img8](/assets/img/2024-10-13-yaml-properties/img1.png)
 
- [스택오버플로우 글](https://stackoverflow.com/questions/77605186/special-characters-in-github-actions-workflow-secret-are-not-being-preserved)에서 escape 문자를 사용하라고 되어있다. 흠.. 근데 Intellij에서 보기에 별로 안좋을 것 같고 Github Secret에 추가할때만 \를 다 넣는 것도 번거로웠다. 일단 더 찾아봐야겠다.
+&nbsp;[스택오버플로우 글](https://stackoverflow.com/questions/77605186/special-characters-in-github-actions-workflow-secret-are-not-being-preserved)에서 escape 문자를 사용하라고 되어있다. 흠.. 근데 Intellij에서 보기에 별로 안좋을 것 같고 Github Secret에 추가할때만 \를 다 넣는 것도 번거로웠다. 일단 더 찾아봐야겠다.
    
 2. ~~따옴표로 묶기~~
 
 ![img9](/assets/img/2024-10-13-yaml-properties/img9.png)
 
-  [다른 블로그 글](https://www.ssw.com.au/rules/handle-special-characters-on-github/)에서는 따옴표(")로 묶으라고 되어있다. 하지만 바로 문제점이 나오는데 Secret 파일에 "가 있을 경우 또 같은 문제가 발생한다는 것이다. 근데 이거 아니고도 해봤는데 나는 그냥 안됐다. 계속 인식을 안했다.
+&nbsp;[다른 블로그 글](https://www.ssw.com.au/rules/handle-special-characters-on-github/)에서는 따옴표(")로 묶으라고 되어있다. 하지만 바로 문제점이 나오는데 Secret 파일에 "가 있을 경우 또 같은 문제가 발생한다는 것이다. 근데 이거 아니고도 해봤는데 나는 그냥 안됐다. 계속 인식을 안했다.
    
 3. Secret을 Base64로 인코딩하기
  
  ![img10](/assets/img/2024-10-13-yaml-properties/img10.png)
 
-아예 특수문자가 걸릴일이 없게 yaml파일을 Base64로 인코딩한 후, workflow 파일에서 빌드시 디코딩하는 방법이다. 신박한 방법인 것 같다. 생각해보니 예전에 AWS를 사용할 때 pem 파일을 Base64로 인코딩한 값을 key로 넣어 접속했던 기억이 난다. 똑같이 하면 될 것 같은데 더 좋은 방법이 있나 더 찾아봤다.
+&nbsp;아예 특수문자가 걸릴일이 없게 yaml파일을 Base64로 인코딩한 후, workflow 파일에서 빌드시 디코딩하는 방법이다. 신박한 방법인 것 같다. 생각해보니 예전에 AWS를 사용할 때 pem 파일을 Base64로 인코딩한 값을 key로 넣어 접속했던 기억이 난다. 똑같이 하면 될 것 같은데 더 좋은 방법이 있나 더 찾아봤다.
 
 4. env에 선언하기
 
  ![img11](/assets/img/2024-10-13-yaml-properties/img11.png)
 
-위의 멘토님이 보내준 글에 있던 방법이다. 여기서 나와있길 따옴표로 감싸져있는거 다 풀어진다고 한다. 어쩐지 안되더라. 
+&nbsp;위의 멘토님이 보내준 글에 있던 방법이다. 여기서 나와있길 따옴표로 감싸져있는거 다 풀어진다고 한다. 어쩐지 안되더라. 
 
 ```yaml
  # SECRET_YML 파일 생성
@@ -209,8 +209,8 @@ spring:
         SECRET_YML_BATCH: ${{ secrets.SECRET_YML_BATCH }}
 ```
 
-workflow에서 run 할때 따로 변수를 선언하고 거기다 초기화를 하면 된다. 나는 이 방법이 먹혔고 제일 낫다고 생각해 이렇게 쓰기로 했다. env에 대해선 [Github Docs](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#env)에 나와있는데 뭐 별거없다.
+&nbsp;workflow에서 run 할때 따로 변수를 선언하고 거기다 초기화를 하면 된다. 나는 이 방법이 먹혔고 제일 낫다고 생각해 이렇게 쓰기로 했다. env에 대해선 [Github Docs](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#env)에 나와있는데 뭐 별거없다.
 
 ### 끝?
 
- 끝이다. 정말 우연히 데이터베이스 비밀번호에 $를 쓰는 바람에 많~이 돌아왔다. 이런게 막상 부딪히면 어떻게 해결할지 모를때가 많은데 이번엔 해답을 찾아서 다행이다. 혹시 이 글로 Github Secret에 $를 쓰면 안되는지 처음 알았다면 기억해두자,,
+ &nbsp;끝이다. 정말 우연히 데이터베이스 비밀번호에 $를 쓰는 바람에 많~이 돌아왔다. 이런게 막상 부딪히면 어떻게 해결할지 모를때가 많은데 이번엔 해답을 찾아서 다행이다. 혹시 이 글로 Github Secret에 $를 쓰면 안되는지 처음 알았다면 기억해두자,,
