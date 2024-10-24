@@ -9,6 +9,8 @@ tags: [yml, yaml, multi module]
 &nbsp;멀티 모듈을 처음으로 사용해봤다. 이유는 아주 간단하게 보기에 헷갈리기 때문이었다. 사이드 프로젝트를 두개정도 해보며 많은 기능이 없어도 파일들이 엄청 많이 생기고 정리하려면 날을 잡아야될 정도란걸 알게 됐다.   
 &nbsp;또 이번 프로젝트는 각각 다른 port에서 실행되는 jar파일이 있었기 때문에 각자 빌드가 필요했다. 그래서 될 수 있으면 만들때부터 구조를 맞춰 작성하려고 멀티 모듈을 사용했다. common, api, batch의 모듈로 나누었다.
 
+<br>
+
 ### 설정 파일(build.gradle, application.properties)
 
 - build.gradle
@@ -85,6 +87,7 @@ dependencies {
  
  ![Datasource 설정 에러](/assets/img/2024-10-13-yaml-properties/img1.png "Datasource 설정 에러")
 
+<br>
 
 ### YamlPropertySourceFactory
 
@@ -122,6 +125,8 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 }
 ```
 
+<br>
+
 ### Github Actions Secret Variable(with Special Characters)
 
 - Docker logs에 찍힌 Spring 오류
@@ -136,6 +141,8 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
 &nbsp;yaml에 있는 비밀번호를 일부러 틀리게 해서 실행해보았다. 그랬더니 이번엔 using password가 yes로 바뀌었다. 이렇게되니 yaml에서 인식 못하는 문자가 포함되었다는 생각이 들었고, 비밀번호를 바꿨더니 정상적으로 되었다.
 
+<br>
+
 - 원인
 
 &nbsp;먼저 yaml에 사용하면 안되는 문자들을 찾아보았다.
@@ -149,6 +156,9 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 ![img6](/assets/img/2024-10-13-yaml-properties/img6.png)
 
 &nbsp;Github Actions를 실행할때 Github Secret에서 값을 고대로 가져온다. 이때 Github Actions는 ubuntu환경에서 실행돼서 $로 시작하는 문구는 "$변수명"으로 인식해 당연히 저 이름의 변수명이 없으니 빈 값으로 치는 것이었다. 그렇다면 linux 계열에서 쓰는 $, &, |, ( 등의 문자들은 다 사용할때 주의해야한다는 것이다. 음... 그렇군 그럼 최대한 사용하지 말아야겠다.
+
+<br>
+<br>
 
 - 해결방법
 
@@ -169,23 +179,32 @@ spring:
 
 근데... $가 있네...?
 
+<br>
+<br>
+
 1. / 넣기
 
-![img8](/assets/img/2024-10-13-yaml-properties/img1.png)
+![img8](/assets/img/2024-10-13-yaml-properties/img8.png)
 
 &nbsp;[스택오버플로우 글](https://stackoverflow.com/questions/77605186/special-characters-in-github-actions-workflow-secret-are-not-being-preserved)에서 escape 문자를 사용하라고 되어있다. 흠.. 근데 Intellij에서 보기에 별로 안좋을 것 같고 Github Secret에 추가할때만 \를 다 넣는 것도 번거로웠다. 일단 더 찾아봐야겠다.
-   
+
+<br>
+
 2. ~~따옴표로 묶기~~
 
 ![img9](/assets/img/2024-10-13-yaml-properties/img9.png)
 
 &nbsp;[다른 블로그 글](https://www.ssw.com.au/rules/handle-special-characters-on-github/)에서는 따옴표(")로 묶으라고 되어있다. 하지만 바로 문제점이 나오는데 Secret 파일에 "가 있을 경우 또 같은 문제가 발생한다는 것이다. 근데 이거 아니고도 해봤는데 나는 그냥 안됐다. 계속 인식을 안했다.
-   
+
+<br>
+
 3. Secret을 Base64로 인코딩하기
  
  ![img10](/assets/img/2024-10-13-yaml-properties/img10.png)
 
 &nbsp;아예 특수문자가 걸릴일이 없게 yaml파일을 Base64로 인코딩한 후, workflow 파일에서 빌드시 디코딩하는 방법이다. 신박한 방법인 것 같다. 생각해보니 예전에 AWS를 사용할 때 pem 파일을 Base64로 인코딩한 값을 key로 넣어 접속했던 기억이 난다. 똑같이 하면 될 것 같은데 더 좋은 방법이 있나 더 찾아봤다.
+
+<br>
 
 4. env에 선언하기
 
@@ -210,6 +229,8 @@ spring:
 ```
 
 &nbsp;workflow에서 run 할때 따로 변수를 선언하고 거기다 초기화를 하면 된다. 나는 이 방법이 먹혔고 제일 낫다고 생각해 이렇게 쓰기로 했다. env에 대해선 [Github Docs](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#env)에 나와있는데 뭐 별거없다.
+
+<br>
 
 ### 끝?
 
