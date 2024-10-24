@@ -155,9 +155,7 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
 
 ![img6](/assets/img/2024-10-13-yaml-properties/img6.png)
 
-<br>
-
-&nbsp;Github Actions를 실행할때 Github Secret에서 값을 고대로 가져온다. 이때 Github Actions는 ubuntu환경에서 실행돼서 $로 시작하는 문구는 "$변수명"으로 인식해 당연히 저 이름의 변수명이 없으니 빈 값으로 치는 것이었다. 그렇다면 linux 계열에서 쓰는 $, &, |, ( 등의 문자들은 다 사용할때 주의해야한다는 것이다. 음... 그렇군 그럼 최대한 사용하지 말아야겠다.
+&nbsp;Github Actions를 실행할때 Github Secret에서 값을 고대로 가져온다. 이때 Github Actions는 ubuntu환경에서 실행돼서 $로 시작하는 문구는 "$변수명"으로 인식해 당연히 저 이름의 변수명이 없으니 빈 값으로 치는 것이었다. 그렇다면 linux 계열에서 쓰는 $, &, ( 등의 문자들은 다 사용할때 주의해야한다는 것이다. 음... 그렇군 그럼 최대한 사용하지 말아야겠다.
 
 <br>
 <br>
