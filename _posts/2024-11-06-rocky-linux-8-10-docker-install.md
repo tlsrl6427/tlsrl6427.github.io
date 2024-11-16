@@ -35,7 +35,7 @@ tags: [linux, rocky linux, ncp, docker, 리눅스, 록키 리눅스, 도커]
 
  ![img5](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img5.png)
 
-&nbsp;아까 에러메세지에서 보았던 링크가 있었다. 여기서 $releasever을 8로 바꾸면 되는데.. 한 가지 생각이 들었다. $releasever을 바꿀 수는 없을까? 찾아보니 바로 나왔다. [블로그 글]을 참고했고, 한 줄만에 끝나서 좋았다.
+&nbsp;아까 에러메세지에서 보았던 링크가 있었다. 여기서 $releasever을 8로 바꾸면 되는데.. 한 가지 생각이 들었다. $releasever을 바꿀 수는 없을까? 찾아보니 바로 나왔다. [블로그 글](https://heum-story.tistory.com/142)을 참고했고, 한 줄만에 끝나서 좋았다.
 
 ```
 $ echo "8" > /etc/yum/vars/releasever
