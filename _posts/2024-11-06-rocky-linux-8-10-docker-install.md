@@ -10,3 +10,23 @@ published: false
 &nbps;프로젝트에서 배치를 돌려서 배치 돌리는 툴로 Jenkins를 사용했는데 전에 Docker Image로 간단히 시작했던 기억이 있어서 이번에도 Docker안에서 Jenkins를 사용하기로 했다. 근데... Docker가 안깔린다...?
 
 ### 서버 스펙과 오류
+
+&nbsp;[블로그](https://hahahax5.tistory.com/10)를 참고해 하나하나 따라하던 중이었다. dnf config-manager로 docker repository를 추가하고 dnf repolist -v로 확인을 해봤는데 무언가 에러가 떴다.
+
+![img1](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img1.png)
+
+&nbsp;언제나 그랬듯이 에러 문구를 구글링해봤는데 썩 맘에 드는 답변이 나오지 않았다. 그러던 중 어떤 [도커 커뮤니티](https://forums.docker.com/t/unable-to-install-docker-on-rhel-9-2/136123)에서 직접 들어가서 봐라! 라는 문구가 있었다. 생각해보니 https로 시작하는 링크였구나 라는 걸 깨닫고 한번 들어가봤다.
+
+![img2](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img2.png)
+
+&nbsp;Rocky Linux가 centos계열이기 때문에 https://download.docker.com/linux/centos로 들어가봤다. Network 탭을 들어가면 Amazon S3에서 제공하고 있고 보면 8.1이 있는 것을 볼 수 있다.
+
+ ![img3](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img3.png)
+
+&nbsp;뭐야 있는데 왜 안되지? 싶었는데 다시 생각해보면 8.1이 아니라 **8.10**이다. 뒤에 숫자를 8.10으로 바꾸면 에러메세지에서 보았던 정겨운 404 Not Found를 볼 수 있다.
+
+ ![img4](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img4.png)
+
+&nbsp;으흠~ 이래서 안됐었다. 8.x를 누르면 301을 받고 8로 리다이렉트가 되는데, 8.xx에 대한 리다이렉트는 없기 때문이다. 
+ 
+### 
