@@ -19,7 +19,7 @@ tags: [linux, rocky linux, ncp, docker, 리눅스, 록키 리눅스, 도커]
 
 ![img2](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img2.png)
 
-&nbsp;Rocky Linux가 centos계열이기 때문에 https://download.docker.com/linux/centos로 들어가봤다. Network 탭을 들어가면 Amazon S3에서 제공하고 있고 보면 8.1이 있는 것을 볼 수 있다.
+&nbsp;Rocky Linux가 centos계열이기 때문에 https://download.docker.com/linux/centos 로 들어가봤다. Network 탭을 들어가면 Amazon S3에서 제공하고 있고 보면 8.1이 있는 것을 볼 수 있다.
 
  ![img3](/assets/img/2024-11-06-rocky-linux-8-10-docker-install/img3.png)
 
