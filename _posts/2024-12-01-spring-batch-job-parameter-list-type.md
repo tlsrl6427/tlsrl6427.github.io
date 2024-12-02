@@ -15,7 +15,7 @@ tags: "spring, batch, job parameter, list"
  Spring Batch 5.0 전까지는 Date, Double, Long, String만 받을 수 있기 때문에 LocalDate와 LocalDateTime을 처리하기 위해서 String을 LocalXXX로 변환하는 글도 심심치 않게 볼 수 있었다. 하지만 5.0부터는 LocalDate와 LocalDateTime이 추가되어 형식만 맞춘다면 쉽게 받을 수 있도록 바뀌었다. 
  그렇다면 다른 타입은 받지 못할까? 그 답은 Spring 공식 문서 [What's New in Spring Batch 5.0](https://docs.spring.io/spring-batch/docs/5.0.4/reference/html/whatsnew.html#default-job-parameter-conversion) 에서 볼 수 있다.
 
-  ![img1](img1.png)
+  ![img1](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img1.png)
 
   5.0부터는 standard conversion service에 converter를 추가하면 아무 타입이나 쓸 수 있다고 한다.
   
@@ -23,25 +23,25 @@ tags: "spring, batch, job parameter, list"
   
 ### Default notation
 
-  ![img2](img1.png)
+  ![img2](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img2.png)
   
   기본 형식이다. 하지만 List 같은 오브젝트는 ,를 포함하기 때문에 사용하지 못한다.
   
 ### Extended notation(JSON)
 
-![img3](img1.png)
+![img3](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img3.png)
 
   콤마가 포함된 value일 때 사용하는거라고 한다. 그러면서 JSON 형식을 소개한다. 역시 편하네 하면서 있는 예제형식대로 변수를 넣어봤다.
 
-   ![img4](img1.png)
+   ![img4](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img4.png)
 
 ### JSON 파싱 오류
 
- ![img5](img1.png)
+ ![img5](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img5.png)
 
  잘 될리가 없다. 이젠 억까가 없으면 서운하다. 내용을 보니 처음부터 쌍따옴표(")가 안붙었다고 안된다고 한다. 그래서 로그에 적힌 문자열을 보니 쌍따옴표가 없어져있었다.
 
-  ![img6](img1.png)
+  ![img6](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img6.png)
 
 ### JSON 직렬화
 
@@ -49,11 +49,11 @@ Spring을 사용하면서 잊고 있는 사실이 있었는데 얘가 생각보�
 
 JsonJobParametersConverter는 ObjectMapper에서 readValue를 하는데 이 함수는 들어오는 JSON 문자열이 직렬화되어있다고 생각하기 때문에 안되어있으면 위와 같은 에러가 뜨는 것이다. 
 
-![img7](img1.png)
+![img7](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img7.png)
 
 때문에 직렬화를 시켜주고 넣어봤다.
 
-![img8](img1.png)
+![img8](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img8.png)
 
 해치웠다. 
 
