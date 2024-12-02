@@ -24,15 +24,11 @@ tags: "spring, batch, job parameter, list"
 <br>
 
 ## List 사용하기
-  
-### Default notation
 
   ![img2](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img2.png)
   
   기본 형식이다. 하지만 List 같은 오브젝트는 ,를 포함하기 때문에 사용하지 못한다.
   <br>
-
-### Extended notation(JSON)
 
 ![img3](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img3.png)
 
