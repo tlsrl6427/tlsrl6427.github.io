@@ -9,6 +9,8 @@ tags: "spring, batch, job parameter, list"
 &nbsp;현재 하고 있는 프로젝트는 op.gg와 lol.ps 같은 리그오브레전드 게임의 데이터를 제공하는 사이트이다. 라이엇 공식 API에서 데이터를 받아오는 것을 Spring Batch로 돌리고 있는데 이때 동적으로 넣을 Job Parameter가 필요하게 됐다.   
 <br>
 &nbsp;하던 중에 티어(tier) 변수에 여러 개를 넣을 상황이 생겼다. 사실 한 티어씩 여러번 배치를 돌리는 방법도 있지만 한번에 보기 쉽게 해보고도 싶었고 나중에 여러 개를 받아야하는 상황이 나올 수도 있을 것 같아서 그냥 해봤다. 하는 김에 한꺼번에 여러 변수를 넣을 수 있는지, 넣을 수 있으면 같은 타입만 가능한지 여러 개의 타입이 섞인 클래스도 가능한지 해보았다.
+<br>
+<br>
 
 ## 현재 버전(5.x) 지원
 
@@ -18,7 +20,9 @@ tags: "spring, batch, job parameter, list"
   ![img1](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img1.png)
 
   5.0부터는 standard conversion service에 converter를 추가하면 아무 타입이나 쓸 수 있다고 한다.
-  
+  <br>
+<br>
+
 ## List 사용하기
   
 ### Default notation
@@ -26,7 +30,8 @@ tags: "spring, batch, job parameter, list"
   ![img2](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img2.png)
   
   기본 형식이다. 하지만 List 같은 오브젝트는 ,를 포함하기 때문에 사용하지 못한다.
-  
+  <br>
+
 ### Extended notation(JSON)
 
 ![img3](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img3.png)
@@ -34,6 +39,7 @@ tags: "spring, batch, job parameter, list"
   콤마가 포함된 value일 때 사용하는거라고 한다. 그러면서 JSON 형식을 소개한다. 역시 편하네 하면서 있는 예제형식대로 변수를 넣어봤다.
 
    ![img4](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img4.png)
+<br>
 
 ### JSON 파싱 오류
 
@@ -42,6 +48,7 @@ tags: "spring, batch, job parameter, list"
  잘 될리가 없다. 이젠 억까가 없으면 서운하다. 내용을 보니 처음부터 쌍따옴표(")가 안붙었다고 안된다고 한다. 그래서 로그에 적힌 문자열을 보니 쌍따옴표가 없어져있었다.
 
   ![img6](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img6.png)
+<br>
 
 ### JSON 직렬화
 
@@ -56,5 +63,6 @@ JsonJobParametersConverter는 ObjectMapper에서 readValue를 하는데 이 함�
 ![img8](/assets/img/2024-12-01-spring-batch-job-parameter-list-type/img8.png)
 
 해치웠다. 
+<br>
 
 ### Class 사용과 그 밖에 ..
