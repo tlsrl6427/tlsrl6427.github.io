@@ -2,6 +2,7 @@
 title: "통계 테이블로 조회시간 줄이기"
 category: "Database"
 tags: ["부하 테스트", "ngrinder", "scheduler", "batch"]
+published: false
 ---
 
 ## 개요
@@ -31,6 +32,7 @@ tags: ["부하 테스트", "ngrinder", "scheduler", "batch"]
 
 ## 결과
 
+![img1](img1.png)
 ## 통계 테이블 장단점
 
 ## 추가로 해볼만한 것
