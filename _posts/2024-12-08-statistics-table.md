@@ -29,9 +29,9 @@ published: false
 
 ### 상황에 맞는 배치 전략
 
-&nbsp;일단 Jenkins 서버가 이미 있긴 하다. 하지만 이 서버는 하루 2000~3000건을 받아오는데에도 버거워했다. 배치지만 사실상 24시간 돌아가는 느낌이기 때문이다. 파일, 네트워크 I/O가 계속 돌아가서 심지어 Jenkins 사이트를 못 들어갈 때도 있다. 이것도 어찌 해보려했는데 많은 것을 해보다가 vcpu 1개의 한계라고 일단 결론지었다. 모니터링을 해보려고 prometheus exporter를 깔았는데 이것도 제때 응답하지 못했다.
+&nbsp;일단 Jenkins 서버가 이미 있긴 하다. 하지만 이 서버는 하루 2000~3000건을 받아오는데에도 버거워했다. 배치지만 사실상 24시간 돌아가는 느낌이기 때문이다. 파일, 네트워크 I/O가 계속 돌아가서 심지어 Jenkins 사이트를 못 들어갈 때도 있다. 이것도 어찌 해보려했는데 많은 것을 해보다가 vcpu 1개의 한계라고 일단 결론지었다. 모니터링을 해보려고 `prometheus exporter`를 깔았는데 이것도 제때 응답하지 못했다.
 
-![img1](img1.png)
+![img1](/assets/img/2024-12-08-statistics-table/img1.png)
 
 
 &nbsp;나중에 다시 봐야되는데..  
@@ -73,17 +73,27 @@ published: false
 
 ## 결과
 
-![img1](img1.png)
+#### postman
+
+![img2](/assets/img/2024-12-08-statistics-table/img2.png)
 
 ↑ API V1(느린 쿼리 버전)
 
-![img1](img1.png)
+![img3](/assets/img/2024-12-08-statistics-table/img3.png)
 
 ↑ API V2(통계 테이블 버전)
 
 &nbsp;비교를 할 수 없을 정도의 차이가 난다. 더 그럴듯한 지표를 보여주기 위해 ngrinder를 세팅해 1시간 동안 여러번 요청해서 평균 응답 시간이 얼마나 나오나 보려고 했다. 하지만 "Too low TPS" 오류가 뜨면서 멈췄다. [어느 ngrinder forum](http://ngrinder.373.s1.nabble.com/What-is-the-threshold-of-the-quot-Too-Low-TPS-quot-error-td934.html)을 보니 1분동안 TPS가 0.001 미만으로 나오면 스크립트가 잘못된 것으로 판단해 멈춰버린다고 한다. 이건 설정으로 건드릴 수 없는 부분이라 다른 테스트 도구를 고려해봐야겠다.
 
-![img1](img1.png)
+#### ngrinder
+
+![img4](/assets/img/2024-12-08-statistics-table/img4.png)
+
+↑ API V1(느린 쿼리 버전)
+
+![img5](/assets/img/2024-12-08-statistics-table/img5.png)
+
+↑ API V2(통계 테이블 버전)
 
 ## 추가로 해볼만한 것
 
