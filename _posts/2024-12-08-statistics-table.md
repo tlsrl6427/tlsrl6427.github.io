@@ -86,6 +86,7 @@ published: false
 ![img2](/assets/img/2024-12-08-statistics-table/img2.png)
 
 ↑ API V1(느린 쿼리 버전) - 129960ms
+<br>
 
 ![img3](/assets/img/2024-12-08-statistics-table/img3.png)
 
@@ -100,7 +101,8 @@ published: false
 
 ![img4](/assets/img/2024-12-08-statistics-table/img4.png)
 
-↑ API V1(느린 쿼리 버전) - 164740ms
+↑ API V1(느린 쿼리 버전) - 164740ms   
+<br>
 
 ![img5](/assets/img/2024-12-08-statistics-table/img5.png)
 
@@ -109,7 +111,6 @@ published: false
 <br>
 
 ## 추가로 해볼만한 것
-<br>
 
 ### Redis
 
