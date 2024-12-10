@@ -96,7 +96,7 @@ tags: ["부하 테스트", "ngrinder", "scheduler", "batch"]
 
 ### Ngrinder
 
-&nbsp;더 그럴듯한 지표를 보여주기 위해 ngrinder를 세팅해 1시간 동안 여러번 요청해서 평균 응답 시간이 얼마나 나오나 보려고 했다. 하지만 "Too low TPS" 오류가 뜨면서 멈췄다. [어느 ngrinder forum](http://ngrinder.373.s1.nabble.com/What-is-the-threshold-of-the-quot-Too-Low-TPS-quot-error-td934.html)을 보니 1분동안 TPS가 0.001 미만으로 나오면 스크립트가 잘못된 것으로 판단해 멈춰버린다고 한다. 이건 설정으로 건드릴 수 없는 부분이라 다른 테스트 도구를 고려해봐야겠다.
+&nbsp;더 그럴듯한 지표를 보여주기 위해 ngrinder를 세팅해 1시간 동안 여러번 요청해서 평균 응답 시간이 얼마나 나오나 보려고 했다. 하지만 "Too low TPS" 오류가 뜨면서 멈췄다. [어느 ngrinder forum](https://ngrinder.373.s1.nabble.com/What-is-the-threshold-of-the-quot-Too-Low-TPS-quot-error-td934.html)을 보니 1분동안 TPS가 0.001 미만으로 나오면 스크립트가 잘못된 것으로 판단해 멈춰버린다고 한다. 이건 설정으로 건드릴 수 없는 부분이라 다른 테스트 도구를 고려해봐야겠다.
 
 ![img4](/assets/img/2024-12-08-statistics-table/img4.png)
 
