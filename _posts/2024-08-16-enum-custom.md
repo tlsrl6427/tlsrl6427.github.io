@@ -2,6 +2,7 @@
 title: "Enum Custom 예외처리하기"
 categories: [Spring]
 tags: [enum, exception, converter, aop]
+published: false
 ---
 
 ### API에서 Enum을 사용할때의 문제점
