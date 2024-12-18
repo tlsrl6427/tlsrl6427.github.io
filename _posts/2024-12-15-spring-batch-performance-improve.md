@@ -84,7 +84,7 @@ MySQL의 경우 DB에서 Auto increment가 된다. JPA는 영속성 컨텍스트
 
 따라서 Jdbc를 통해 bulk insert를 해야한다.
 
-```
+```java
 String sql="INSERT INTO match (game_creation, game_duration, ... , game_version ) VALUES (?, ?, ... , ?)";
 
 jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -103,5 +103,8 @@ jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
     }
 });
 ```
+
+<br>
+<br>
 
 ## 성능 테스트
