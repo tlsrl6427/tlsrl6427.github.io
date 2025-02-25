@@ -26,7 +26,7 @@ published: false
 
   ![img4](/assets/img/2025-02-24-jenkins-hacking/img4.png)
 
-  이 ^ㅐ끼뭐임?? 내가 만든게 아니다. 아무리 내가 하수여도 Jenkins 업데이트가 알아서 job으로 만들어져서 된다고??? 말도 안된다. 당장 들어가봤다(이미지는 최근에 찍은 것이다). 구성에 들어가보니 Build Steps - Execute shell에 이런 것들이 적혀있었다.
+  이거 뭐임?? 내가 만든게 아니다. 아무리 내가 하수여도 Jenkins 업데이트가 알아서 job으로 만들어져서 된다고??? 말도 안된다. 당장 들어가봤다(이미지는 최근에 찍은 것이다). 구성에 들어가보니 Build Steps - Execute shell에 이런 것들이 적혀있었다.
 
 ```bash
 #!/bin/bash
@@ -95,7 +95,7 @@ k auto.c3pool.org:13333
 
 ```
 
- 이 ^ㅐ끼 고수다. 봐도 모르겠다. Linux 명령어들이라 더 모르겠다. 하지만 화가 나니 천천히 파헤쳐보자.
+ 이 사람 고수다. 봐도 모르겠다. Linux 명령어들이라 더 모르겠다. 하지만 화가 나니 천천히 파헤쳐보자.
 
 ```bash
 test ! -s trace && \
