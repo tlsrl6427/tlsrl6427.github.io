@@ -162,7 +162,7 @@ test ! -x trace && chmod +x trace;
 
   ![img5](/assets/img/2025-02-24-jenkins-hacking/img5.png)
 
-  ![img5](/assets/img/2025-02-24-jenkins-hacking/img5.png)
+  ![img6](/assets/img/2025-02-24-jenkins-hacking/img6.png)
 
 awk에서 에러난 부분은 잘 모르겠고, trace가 없다고 나와있다. 안그래도 ps -ef로 이미 소프트웨어가 돌아가고 있는지 봤는데 없었고, 파일을 다운로드 받은 곳도 가봤는데 trace.tgz 압축파일만 있었다. 압축해제하는 부분에서 무슨 일이 있었는지 아예 해제가 안되어있었다. 직접 열어볼까도 했지만 쫄보라 그냥 놔뒀다..
 
