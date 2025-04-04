@@ -4,7 +4,7 @@ category: "Java"
 tags: ["encoding", "gradle"]
 ---
 
-&nbsp;Rest Docs를 만들기 위해 빌드를 하는 도중 일어난 오류이다. 2023.11.17에 티스토리에 썼던 글.
+&nbsp;Rest Docs를 만들기 위해 빌드를 하는 도중 일어난 오류이다. 2023.11.17에 [티스토리](https://ignihs.tistory.com/15)에 썼던 글
 
 ## 문제의 발단
 ---
