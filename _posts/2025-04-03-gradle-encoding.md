@@ -18,13 +18,13 @@ tags: ["encoding", "gradle"]
 ## 해결과정
 ---
 
-### 인텔리제이에서 테스트 속성을 gradle로 하고 실행하기
+### 1. 인텔리제이에서 테스트 속성을 gradle로 하고 실행하기
 
 ![img2](/assets/img/‎2025-04-03-gradle-encoding/img2.png)
 
 &nbsp;프로젝트를 처음 시작할때 Build and run 속성을 Default인 Gradle로 해놓으면 느리기 때문에 두 속성을 "IntelliJ IDEA"로 바꿔놓은 경험이 있을 것이다. 나는 인프런의 김영한님 강의를 들으면서 어느순간 바꿔놓은 것 같다. 그리고 까먹고 있었다가 이 오류를 계기로 기억이 나서 바꿔보았다.
 
-### 테스트 돌리고 로그확인
+### 2. 테스트 돌리고 로그확인
 
 ![img3](/assets/img/‎2025-04-03-gradle-encoding/img3.png)
 
@@ -34,7 +34,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;request 객체를 ObjectMapper를 이용해 바꾸는 과정에서 에러가 나는 것 같다. 
 
-### 인코딩 오류
+### 3. 인코딩 오류
 
 ![img5](/assets/img/‎2025-04-03-gradle-encoding/img5.png)
 
@@ -45,7 +45,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;인코딩을 적용해주면 되는 문제라 여러가지로 풀 수 있었다.
 
-### getBytes()안에 UTF-8 명시
+### 1. getBytes()안에 UTF-8 명시
 
 ![img6](/assets/img/‎2025-04-03-gradle-encoding/img6.png)
 
@@ -55,7 +55,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;java.nio.charset에 있는 클래스를 넣을 수 있다는 것이다. 저 패키지안에 있는 클래스들 중 StandardCharsets의 UTF-8 속성을 추가해주니 통과가 되었다.
 
-### writeValueAsBytes로 바꾸기
+### 2. writeValueAsBytes로 바꾸기
 
 ![img8](/assets/img/‎2025-04-03-gradle-encoding/img8.png)
 
@@ -65,7 +65,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;writeValueAsBytes에 Ctrl를 누른 상태로 마우스를 클릭하면 함수 안의 내용이 나온다. 보면 JsonEncoding.UTF8로 기본설정을 하고 시작하는 것을 볼 수 있다.
 
-### gradle.properties 추가
+### 3. gradle.properties 추가
 
 ![img10](/assets/img/‎2025-04-03-gradle-encoding/img10.png)
 
@@ -80,7 +80,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;사실 여기가 메인이다. 이 오류가 일어났을 당시엔 로그를 보고 구글링을 통해 비교적 쉽게 오류를 고치고 밀린 코딩을 했었다. 그리고 돌이켜 생각해보니 평소엔 프로젝트하면서 많은 테스트를 작성했고 이런 인코딩 문제가 없었는데 갑자기 왜 이런 오류가 났을까 궁금했고, 그 이유를 찾아보기로 했다. 
 
-### getBytes()의 default encoding
+### 1. getBytes()의 default encoding
 
 ![img12](/assets/img/‎2025-04-03-gradle-encoding/img12.png)
 
@@ -94,7 +94,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;위에서도 봤던 getBytes()의 설명을 다시 읽어보면 플랫폼의 기본 문자열 집합을 사용한다고 나와있다. 지금이야 gradle.properties에 UTF-8이라고 명시해놨지만 원래는 무엇이었을까?
 
-### platform에 따른 인코딩
+### 2. platform에 따른 인코딩
 
 &nbsp;일단 platform이란 무엇일까? 말그대로 테스트를 돌리는 주체이다. 아까 Intellij Settings에서 "Run tests Using" 속성을 gradle로 했던것을 기억할 것이다. gradle.properties를 놔둔 상태에서 이 속성을 "Intellij IDEA"로 바꾸고 File Encodings을 모두 default(나는 windows를 사용하기 때문에 x-windows-949)로 바꿔보자.   
 
@@ -106,7 +106,7 @@ tags: ["encoding", "gradle"]
 
 &nbsp;아무튼 설명을 보자면 Gradle은 JVMs platform의 인코딩을 따른다고 되어있다. 흠... 또 플랫폼?
 
-### Gradle의 기본 인코딩
+### 3. Gradle의 기본 인코딩
 
 ![img16](/assets/img/‎2025-04-03-gradle-encoding/img16.png)
 
