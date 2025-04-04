@@ -15,6 +15,9 @@ tags: ["encoding", "gradle"]
 
 &nbsp;400 에러는 Bad Request, 즉 서버에서 요구하는 Request에 맞지 않는 요청을 보냈다는 뜻이다. Postman으로 요청을 했다면 모를까 테스트에서는 직접 객체를 만들어 MockMvc.perform안에 넣었기 때문에 틀릴리가 없을텐데...? 일단 이 오류메세지 만으로는 알 수 없으니 인텔리제이에서 직접 확인해보도록 하자.
 
+<br>
+<br>
+
 ## 해결과정
 ---
 
@@ -39,6 +42,9 @@ tags: ["encoding", "gradle"]
 ![img5](/assets/img/‎2025-04-03-gradle-encoding/img5.png)
 
 &nbsp;음.. 인코딩 어쩌구저쩌구 뭐라그러고 UTF-8 인코딩으로 읽으려고 하는데 알 수 없는 문장이라고 한다. 그렇다면 request가 UTF-8 형식으로 잘 바뀌지 않았나보다. 
+
+<br>
+<br>
 
 ## 해결방법
 ---
@@ -74,6 +80,9 @@ tags: ["encoding", "gradle"]
 ![img11](/assets/img/‎2025-04-03-gradle-encoding/img11.png)
 
 &nbsp;그랬더니 아까 안됐던 writeAsValueAsString().getBytes()가 통과되는 것을 확인할 수 있다.
+
+<br>
+<br>
 
 ## 그렇다면 왜 이런 문제가 일어났을까?
 ---
@@ -121,6 +130,9 @@ tags: ["encoding", "gradle"]
 ![img18](/assets/img/‎2025-04-03-gradle-encoding/img18.png)
 
 &nbsp;file encoding을 MS949로 한다고 명시적으로 나와있다. 파고파서 결국엔 해답을 얻었다.
+
+<br>
+<br>
 
 ## 정리
 ---
