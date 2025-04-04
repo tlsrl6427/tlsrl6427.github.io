@@ -10,7 +10,7 @@ tags: ["encoding", "gradle"]
 
 ![img1](/assets/img/2025-04-04-gradle-encoding/img1.png)
 
-&nbsp;팀원이 Rest docs를 만들기 위해 ./gradlew build를 하는 도중 오류가 떴다. 웬만하면 각자 해결했겠지만 이번에는 집단지성이 필요했는데 인텔리제이에서는 잘 돌아갔는데 gradle로 빌드를 하면 오류가 떴기 때문이다. 심지어 오류 메세지도 아리송하다.   
+&nbsp; 팀원이 Rest docs를 만들기 위해 ./gradlew build를 하는 도중 오류가 떴다. 웬만하면 각자 해결했겠지만 이번에는 집단지성이 필요했는데 인텔리제이에서는 잘 돌아갔는데 gradle로 빌드를 하면 오류가 떴기 때문이다. 심지어 오류 메세지도 아리송하다.   
 
 &nbsp;400 에러는 Bad Request, 즉 서버에서 요구하는 Request에 맞지 않는 요청을 보냈다는 뜻이다. Postman으로 요청을 했다면 모를까 테스트에서는 직접 객체를 만들어 MockMvc.perform안에 넣었기 때문에 틀릴리가 없을텐데...? 일단 이 오류메세지 만으로는 알 수 없으니 인텔리제이에서 직접 확인해보도록 하자.
 
