@@ -1,5 +1,5 @@
 ---
-title: Gradle 빌드시 encoding 문제
+title: "Gradle 빌드시 encoding 문제"
 category: "Java"
 tags: ["encoding", "gradle"]
 ---
